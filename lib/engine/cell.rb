@@ -1,7 +1,7 @@
 module Engine
   class Cell
     attr_accessor :has_mine, :is_discovered, :has_flag
-    attr_reader :x, :y
+    attr_reader :x, :y, :neighborhood
 
     def initialize(x, y)
       Engine::Validate.type('x', Integer, x)
@@ -15,6 +15,7 @@ module Engine
       @is_discovered = false
       @has_flag = false
       @has_mine = false
+      @neighborhood = []
     end
   end
 end
