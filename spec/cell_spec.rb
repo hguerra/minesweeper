@@ -2,7 +2,11 @@ require 'spec_helper'
 
 RSpec.describe Engine::Cell do
   before(:each) do
-    @cell = Engine::Cell.new(0, 1)
+    @cell = Engine::Cell.new(1, 1)
+  end
+
+  after(:each) do
+    @cell = nil
   end
 
   describe '#x' do
@@ -13,8 +17,8 @@ RSpec.describe Engine::Cell do
     end
 
     context 'get x' do
-      it 'should return 0 when access cell.x' do
-        expect(@cell.x).to eql(0)
+      it 'should return 1 when access cell.x' do
+        expect(@cell.x).to eql(1)
       end
     end
   end
@@ -47,30 +51,30 @@ RSpec.describe Engine::Cell do
     end
 
     it 'should return an array with rows and cols' do
-      @cell.neighborhood << [0, 0]
-      @cell.neighborhood << [0, 1]
-      @cell.neighborhood << [0, 2]
-
-      @cell.neighborhood << [1, 0]
+      @cell.neighborhood << [1, 1]
       @cell.neighborhood << [1, 2]
+      @cell.neighborhood << [1, 3]
 
-      @cell.neighborhood << [2, 0]
       @cell.neighborhood << [2, 1]
-      @cell.neighborhood << [2, 2]
+      @cell.neighborhood << [2, 3]
+
+      @cell.neighborhood << [3, 1]
+      @cell.neighborhood << [3, 2]
+      @cell.neighborhood << [3, 3]
 
       expect(@cell.neighborhood).not_to be_empty
       expect(@cell.neighborhood.size).to eql(8)
 
-      expect(@cell.neighborhood[0]).to eql([0, 0])
-      expect(@cell.neighborhood[1]).to eql([0, 1])
-      expect(@cell.neighborhood[2]).to eql([0, 2])
+      expect(@cell.neighborhood[0]).to eql([1, 1])
+      expect(@cell.neighborhood[1]).to eql([1, 2])
+      expect(@cell.neighborhood[2]).to eql([1, 3])
 
-      expect(@cell.neighborhood[3]).to eql([1, 0])
-      expect(@cell.neighborhood[4]).to eql([1, 2])
+      expect(@cell.neighborhood[3]).to eql([2, 1])
+      expect(@cell.neighborhood[4]).to eql([2, 3])
 
-      expect(@cell.neighborhood[5]).to eql([2, 0])
-      expect(@cell.neighborhood[6]).to eql([2, 1])
-      expect(@cell.neighborhood[7]).to eql([2, 2])
+      expect(@cell.neighborhood[5]).to eql([3, 1])
+      expect(@cell.neighborhood[6]).to eql([3, 2])
+      expect(@cell.neighborhood[7]).to eql([3, 3])
     end
   end
 
@@ -104,6 +108,16 @@ RSpec.describe Engine::Cell do
     it 'should return true after set cell.has_flag' do
       @cell.has_flag = true
       expect(@cell.has_flag).to be_truthy
+    end
+  end
+
+  describe '#eql?' do
+    it 'should not be equals' do
+      expect(@cell).not_to eql(Engine::Cell.new(2, 2))
+    end
+
+    it 'should be equals' do
+      expect(@cell).to eql(Engine::Cell.new(1, 1))
     end
   end
 end

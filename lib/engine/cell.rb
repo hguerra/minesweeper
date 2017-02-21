@@ -4,11 +4,11 @@ module Engine
     attr_reader :x, :y, :neighborhood
 
     def initialize(x, y)
-      Engine::Validate.type('x', Integer, x)
-      Engine::Validate.type('y', Integer, y)
+      Engine::Validate.type 'x', Integer, x
+      Engine::Validate.type 'y', Integer, y
 
-      Engine::Validate.positive_argument('x', x)
-      Engine::Validate.positive_argument('y', y)
+      Engine::Validate.positive_argument 'x', x
+      Engine::Validate.positive_argument 'y', y
 
       @x = x
       @y = y
@@ -16,6 +16,10 @@ module Engine
       @has_flag = false
       @has_mine = false
       @neighborhood = []
+    end
+
+    def eql?(other)
+      @x == other.x and @y == other.y
     end
   end
 end
