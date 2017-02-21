@@ -8,7 +8,7 @@ module Engine
 
       @width = width
       @height = height
-      @cells = {undiscovered: [], discovered: []}
+      @cells = Array.new(@height) { Array.new(@width) }
     end
 
     def add(cell)
@@ -17,8 +17,7 @@ module Engine
                             got #{cell.x} and #{cell.y}." unless valid_cell?(cell.x, cell.y)
 
       add_neighborhood(cell)
-      @cells[:undiscovered] << cell
-
+      @cells[cell.y][cell.x] = cell
       cell
     end
 
@@ -32,7 +31,7 @@ module Engine
       raise ArgumentError, "Argument 'x' and 'y' should be a values between width (#{@width}) and height #{@height},
                             got #{x} and #{y}." unless valid_cell?(x, y)
 
-      @cells.values.flatten.lazy.find { |cell| cell.eql? Engine::Cell.new(x, y) }
+      @cells[y][x]
     end
 
     def each_neighbor(cell)

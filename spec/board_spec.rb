@@ -10,7 +10,11 @@ RSpec.describe Engine::Board do
   end
 
   describe '#add' do
-    it 'should raise error' do
+    it 'should raise error, cell is not a Engine::Cell' do
+      expect { @board.add(1) }.to raise_error TypeError
+    end
+
+    it 'should raise error, cell does not belong to the board' do
       cell = Engine::Cell.new(9, 9)
       expect { @board.add(cell) }.to raise_error ArgumentError
     end
@@ -56,6 +60,10 @@ RSpec.describe Engine::Board do
   end
 
   describe '#get' do
+    it 'should raise TypeError' do
+      expect { @board.get('a', 1) }.to raise_error TypeError
+    end
+
     it 'should raise error, x < 0' do
       cell = Engine::Cell.new(1, 1)
       cell.is_discovered = true
@@ -106,6 +114,10 @@ RSpec.describe Engine::Board do
   end
 
   describe '#each_neighbor' do
+    it 'should raise TypeError' do
+      expect { @board.each_neighbor 'cell' }.to raise_error TypeError
+    end
+
     it 'should not raise error' do
       load_board 2
       cell = @board.get 1, 1
