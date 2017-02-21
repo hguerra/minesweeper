@@ -8,7 +8,9 @@ module Engine
 
       @width = width
       @height = height
-      @cells = Array.new(@height) { Array.new(@width) }
+      @cells = {}
+
+      (1..@height).each { |y| @cells[y] = [] }
     end
 
     def add(cell)
