@@ -12,7 +12,7 @@ RSpec.describe Engine::PrettyPrinter do
   describe '#print' do
     it 'should print' do
       board_state = Engine::BoardState.new(create_board)
-      expect { @printer.print(board_state) }.to output("╔═════════════╗\n║ Minesweeper ║\n╚═════════════╝\n B  1  _ \n 2  *  * \n *  *  F \n").to_stdout
+      expect { @printer.print(board_state) }.to output("╔════════╗\n B  1  _ \n 2  *  * \n *  *  F \n╚════════╝\n").to_stdout
     end
 
     def create_board
