@@ -120,4 +120,15 @@ RSpec.describe Engine::Cell do
       expect(@cell).to eql(Engine::Cell.new(1, 1))
     end
   end
+
+  describe '#neighbor_mine' do
+    it 'get' do
+      expect(@cell.neighbor_mine).to eql(0)
+    end
+
+    it 'set' do
+      @cell.neighbor_mine = 3
+      expect(@cell.neighbor_mine).to eql(3)
+    end
+  end
 end

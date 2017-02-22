@@ -5,10 +5,31 @@ module Engine
       Engine::Validate.positive_argument 'num_mines', num_mines
 
       load_board width, height, num_mines, prng
+
+      @still_playing = true
     end
 
-    def board_state
-      {undiscovered: [], discovered: []}
+    def still_playing?
+      @still_playing
+    end
+
+    def play(x, y)
+      false unless still_playing?
+
+      @board.get(x, y).tap do |cell|
+        return false if cell.is_discovered or cell.has_flag
+
+        cell.is_discovered = true
+        if cell.has_mine
+          @still_playing = false
+        else
+          @board.each_neighbor(cell) do |neighbor|
+            neighbor.is_discovered = true unless neighbor.is_discovered and neighbor.has_flag and neighbor.has_mine
+          end if cell.neighbor_mine == 0
+        end
+
+        return true
+      end
     end
 
     private
@@ -23,7 +44,12 @@ module Engine
         end
       end
 
-      (1..num_mines).each { @board.get(prng.rand(1..width), prng.rand(1..height)).has_mine = true }
+      (1..num_mines).each do
+        @board.get(prng.rand(1..width), prng.rand(1..height)).tap do |cell|
+          cell.has_mine = true
+          @board.each_neighbor(cell) { |neighbor| neighbor.neighbor_mine += 1 }
+        end
+      end
     end
   end
 end

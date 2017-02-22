@@ -1,6 +1,6 @@
 module Engine
   class Cell
-    attr_accessor :has_mine, :is_discovered, :has_flag
+    attr_accessor :has_mine, :is_discovered, :has_flag, :neighbor_mine
     attr_reader :x, :y, :neighborhood
 
     def initialize(x, y)
@@ -16,6 +16,7 @@ module Engine
       @has_flag = false
       @has_mine = false
       @neighborhood = []
+      @neighbor_mine = 0
     end
 
     def eql?(other)
