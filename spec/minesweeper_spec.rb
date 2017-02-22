@@ -146,4 +146,50 @@ RSpec.describe Engine::Minesweeper do
       end
     end
   end
+
+  describe '#victory?' do
+    context 'before lose or win' do
+      it 'should return false' do
+        expect(@minesweeper.victory?).to be_falsey
+        expect(@minesweeper.play(2, 2)).to be_truthy
+        expect(@minesweeper.victory?).to be_falsey
+      end
+    end
+
+    context 'after lose' do
+      it 'should return false' do
+        expect(@minesweeper.victory?).to be_falsey
+        expect(@minesweeper.play(2, 2)).to be_truthy
+        expect(@minesweeper.victory?).to be_falsey
+
+        expect(@minesweeper.play(1, 1)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_falsey
+        expect(@minesweeper.victory?).to be_falsey
+      end
+    end
+
+    context 'after win' do
+      it 'should return false' do
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(1, 1)).to be_truthy
+        expect(@minesweeper.flag(1, 2)).to be_truthy
+        expect(@minesweeper.flag(3, 2)).to be_truthy
+        expect(@minesweeper.flag(4, 2)).to be_truthy
+        expect(@minesweeper.flag(3, 4)).to be_truthy
+
+        expect(@minesweeper.play(2, 1)).to be_truthy
+        expect(@minesweeper.play(3, 1)).to be_truthy
+        expect(@minesweeper.play(4, 1)).to be_truthy
+        expect(@minesweeper.play(2, 2)).to be_truthy
+        expect(@minesweeper.play(1, 3)).to be_truthy
+        expect(@minesweeper.play(2, 3)).to be_truthy
+        expect(@minesweeper.play(3, 3)).to be_truthy
+        expect(@minesweeper.play(4, 3)).to be_truthy
+        expect(@minesweeper.play(1, 4)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_falsey
+        expect(@minesweeper.victory?).to be_truthy
+      end
+    end
+  end
 end

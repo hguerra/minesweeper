@@ -55,6 +55,10 @@ module Engine
       end
     end
 
+    def victory?
+      @alive and not still_playing?
+    end
+
     private
 
     def load_board(prng)
