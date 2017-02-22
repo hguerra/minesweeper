@@ -22,5 +22,12 @@ module Engine
     def eql?(other)
       @x == other.x and @y == other.y
     end
+
+    def hash
+      hash = 3
+      hash = 97 * hash + @x
+      hash = 97 * hash + @y
+      hash
+    end
   end
 end

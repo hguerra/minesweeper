@@ -28,9 +28,7 @@ module Engine
         if cell.has_mine
           @alive = false
         else
-          @board.each_neighbor(cell) do |neighbor|
-            click neighbor unless neighbor.is_discovered and neighbor.has_flag and neighbor.has_mine
-          end if cell.neighbor_mine == 0
+          click_around cell
         end
 
         return true
@@ -86,6 +84,26 @@ module Engine
     def click(cell)
       cell.is_discovered = true
       @num_discovered_cells += 1
+    end
+
+    def click_around(starting_coord)
+      return unless starting_coord.neighbor_mine == 0
+
+      queue = [starting_coord]
+      done = Set.new [starting_coord]
+
+      until queue.empty?
+        coord = queue.shift
+        @board.each_neighbor(coord) do |neighbor|
+          unless done.include? neighbor
+            unless neighbor.is_discovered and neighbor.has_flag and neighbor.has_mine
+              click neighbor
+              done << neighbor
+              queue << neighbor if neighbor.neighbor_mine == 0
+            end
+          end
+        end
+      end
     end
   end
 end

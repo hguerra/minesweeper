@@ -20,7 +20,13 @@ RSpec.describe Engine::Minesweeper do
     context 'when user clicked on a cell that was discovered because their neighbors has no mines' do
       it 'should return false' do
         expect(@minesweeper.play(1, 4)).to be_truthy
+
+        expect(@minesweeper.play(1, 3)).to be_falsey
+        expect(@minesweeper.play(2, 3)).to be_falsey
+        expect(@minesweeper.play(3, 3)).to be_falsey
+
         expect(@minesweeper.play(2, 4)).to be_falsey
+        expect(@minesweeper.play(3, 4)).to be_falsey
       end
     end
 
