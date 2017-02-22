@@ -12,21 +12,21 @@ RSpec.describe Engine::Minesweeper do
   describe '#play' do
     context 'when user clicked twice the same cell' do
       it 'should return false' do
-        @minesweeper.play(2, 1)
+        expect(@minesweeper.play(2, 1)).to be_truthy
         expect(@minesweeper.play(2, 1)).to be_falsey
       end
     end
 
     context 'when user clicked on a cell that was discovered because their neighbors has no mines' do
       it 'should return false' do
-        @minesweeper.play(1, 4)
+        expect(@minesweeper.play(1, 4)).to be_truthy
         expect(@minesweeper.play(2, 4)).to be_falsey
       end
     end
 
     context 'when user clicked on a cell that has a flag' do
       it 'should return false' do
-        @minesweeper.flag(1, 1)
+        expect(@minesweeper.flag(1, 1)).to be_truthy
         expect(@minesweeper.play(1, 1)).to be_falsey
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe Engine::Minesweeper do
   describe '#flag' do
     context 'when user put a flag on a cell that was discovered' do
       it 'should return false' do
-        @minesweeper.play(2, 3)
+        expect(@minesweeper.play(2, 3)).to be_truthy
         expect(@minesweeper.flag(2, 3)).to be_falsey
       end
     end
@@ -74,6 +74,75 @@ RSpec.describe Engine::Minesweeper do
 
         expect(@minesweeper.flag(2, 1)).to be_truthy
         expect(@minesweeper.play(2, 1)).to be_truthy
+      end
+    end
+  end
+
+  describe '#still_playing?' do
+    context 'before lose or win' do
+      it 'should return true' do
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(2, 2)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_truthy
+      end
+    end
+
+    context 'after lose' do
+      it 'should return false' do
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(2, 2)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_truthy
+
+        expect(@minesweeper.play(1, 1)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_falsey
+      end
+    end
+
+    context 'after win' do
+      it 'should return false' do
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(1, 1)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(1, 2)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(3, 2)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(4, 2)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.flag(3, 4)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(2, 1)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(3, 1)).to be_truthy
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(4, 1)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(2, 2)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(1, 3)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(2, 3)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(3, 3)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(4, 3)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_truthy
+        expect(@minesweeper.play(1, 4)).to be_truthy
+
+        expect(@minesweeper.still_playing?).to be_falsey
       end
     end
   end

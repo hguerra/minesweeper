@@ -4,13 +4,20 @@ module Engine
       Engine::Validate.type 'num_mines', Integer, num_mines
       Engine::Validate.positive_argument 'num_mines', num_mines
 
-      load_board width, height, num_mines, prng
+      @width = width
+      @height = height
+      @num_mines = num_mines
+      @board = Board.new @width, @height
 
-      @still_playing = true
+      @num_clean_cells = @width * @height - @num_mines
+      @num_discovered_cells = 0
+      @alive = true
+
+      load_board prng
     end
 
     def still_playing?
-      @still_playing
+      @alive and @num_discovered_cells < @num_clean_cells
     end
 
     def play(x, y)
@@ -19,12 +26,12 @@ module Engine
       @board.get(x, y).tap do |cell|
         return false if cell.is_discovered or cell.has_flag
 
-        cell.is_discovered = true
+        click cell
         if cell.has_mine
-          @still_playing = false
+          @alive = false
         else
           @board.each_neighbor(cell) do |neighbor|
-            neighbor.is_discovered = true unless neighbor.is_discovered and neighbor.has_flag and neighbor.has_mine
+            click neighbor unless neighbor.is_discovered and neighbor.has_flag and neighbor.has_mine
           end if cell.neighbor_mine == 0
         end
 
@@ -50,22 +57,24 @@ module Engine
 
     private
 
-    def load_board(width, height, num_mines, prng)
-      @board = Board.new width, height
-      @num_mines = num_mines
-
-      (1..height).each do |y|
-        (1..width).each do |x|
+    def load_board(prng)
+      (1..@height).each do |y|
+        (1..@width).each do |x|
           @board.add Engine::Cell.new(x, y)
         end
       end
 
-      (1..num_mines).each do
-        @board.get(prng.rand(1..width), prng.rand(1..height)).tap do |cell|
+      (1..@num_mines).each do
+        @board.get(prng.rand(1..@width), prng.rand(1..@height)).tap do |cell|
           cell.has_mine = true
           @board.each_neighbor(cell) { |neighbor| neighbor.neighbor_mine += 1 }
         end
       end
+    end
+
+    def click(cell)
+      cell.is_discovered = true
+      @num_discovered_cells += 1
     end
   end
 end
