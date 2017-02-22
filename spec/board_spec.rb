@@ -113,29 +113,50 @@ RSpec.describe Engine::Board do
     end
   end
 
-  describe '#each_neighbor' do
-    it 'should raise TypeError' do
-      expect { @board.each_neighbor 'cell' }.to raise_error TypeError
-    end
-
-    it 'should not raise error' do
-      load_board 2
-      cell = @board.get 1, 1
-
-      expect { @board.each_neighbor cell }.not_to raise_error
-    end
-
-    it 'should return all 8 neighbor' do
-      load_board 8
-      cell = @board.get 2, 2
-
-      count = 0
-      @board.each_neighbor cell do |neighbor|
-        expect(neighbor).to be_a Engine::Cell
-        count += 1
+  describe 'Enumerable' do
+    describe '#each_neighbor' do
+      it 'should raise TypeError' do
+        expect { @board.each_neighbor 'cell' }.to raise_error TypeError
       end
 
-      expect(count).to eql(8)
+      it 'should not raise error' do
+        load_board 2
+        cell = @board.get 1, 1
+
+        expect { @board.each_neighbor cell }.not_to raise_error
+      end
+
+      it 'should return all 8 neighbor' do
+        load_board 8
+        cell = @board.get 2, 2
+
+        count = 0
+        @board.each_neighbor cell do |neighbor|
+          expect(neighbor).to be_a Engine::Cell
+          count += 1
+        end
+
+        expect(count).to eql(8)
+      end
+    end
+
+    describe '#each' do
+      it 'should not raise error' do
+        load_board 2
+        expect { @board.each }.not_to raise_error
+      end
+
+      it 'should return all 8 neighbor' do
+        load_board 8
+
+        count = 0
+        @board.each do |cell|
+          expect(cell).to be_a Engine::Cell
+          count += 1
+        end
+
+        expect(count).to eql(64)
+      end
     end
 
     def load_board(size)
@@ -144,6 +165,24 @@ RSpec.describe Engine::Board do
           @board.add Engine::Cell.new(col, row)
         end
       end
+    end
+  end
+
+  describe '#attr_reader' do
+    it 'should raise error' do
+      expect { @board.width = 10 }.to raise_error NoMethodError
+    end
+
+    it 'should raise error' do
+      expect { @board.height = 10 }.to raise_error NoMethodError
+    end
+
+    it 'should return the width' do
+      expect(@board.width).to eql(8)
+    end
+
+    it 'should return the height' do
+      expect(@board.height).to eql(8)
     end
   end
 end

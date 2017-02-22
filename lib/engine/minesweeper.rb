@@ -4,12 +4,10 @@ module Engine
       Engine::Validate.type 'num_mines', Integer, num_mines
       Engine::Validate.positive_argument 'num_mines', num_mines
 
-      @width = width
-      @height = height
+      @board = Board.new width, height
       @num_mines = num_mines
-      @board = Board.new @width, @height
 
-      @num_clean_cells = @width * @height - @num_mines
+      @num_clean_cells = @board.width * @board.height - @num_mines
       @num_discovered_cells = 0
       @alive = true
 
@@ -62,14 +60,14 @@ module Engine
     private
 
     def load_board(prng)
-      (1..@height).each do |y|
-        (1..@width).each do |x|
+      (1..@board.height).each do |y|
+        (1..@board.width).each do |x|
           @board.add Engine::Cell.new(x, y)
         end
       end
 
       (1..@num_mines).each do
-        @board.get(prng.rand(1..@width), prng.rand(1..@height)).tap do |cell|
+        @board.get(prng.rand(1..@board.width), prng.rand(1..@board.height)).tap do |cell|
           cell.has_mine = true
           @board.each_neighbor(cell) { |neighbor| neighbor.neighbor_mine += 1 }
         end

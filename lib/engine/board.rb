@@ -1,5 +1,8 @@
 module Engine
   class Board
+    attr_reader :height, :width
+    include Enumerable
+
     def initialize(width, height)
       Engine::Validate.type 'width', Integer, width
       Engine::Validate.type 'height', Integer, height
@@ -41,6 +44,12 @@ module Engine
 
       cell.neighborhood.each do |coord|
         yield get(coord[0], coord[1]) if block_given?
+      end
+    end
+
+    def each
+      @cells.values.flatten.compact.each do |cell|
+        yield cell if block_given?
       end
     end
 
