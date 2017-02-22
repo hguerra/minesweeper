@@ -58,6 +58,11 @@ module Engine
     end
 
     def board_state(**options)
+      if options[:xray] and still_playing?
+        options[:xray] = false
+        warn "Warning: Argument 'xray' is valid only if the game is finished."
+      end
+
       BoardState.new(@board, options)
     end
 
