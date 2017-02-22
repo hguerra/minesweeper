@@ -32,6 +32,22 @@ module Engine
       end
     end
 
+    def flag(x, y)
+      false unless still_playing?
+
+      @board.get(x, y).tap do |cell|
+        if cell.has_flag
+          cell.has_flag = false
+        elsif not cell.is_discovered
+          cell.has_flag = true
+        else
+          return false
+        end
+
+        return true
+      end
+    end
+
     private
 
     def load_board(width, height, num_mines, prng)
