@@ -6,8 +6,12 @@ module Engine
 
     def print(board_state)
       Engine::Validate.type 'board_state', BoardState, board_state
+      rows = board_state.get
 
-      board_state.get.each do |col|
+      header = '═' * (2.8 * rows[0].size)
+      puts "╔#{header}╗"
+
+      rows.each do |col|
         row = ''
         col.each do |state|
           case state
@@ -28,6 +32,8 @@ module Engine
 
         puts row
       end
+
+      puts "╚#{header}╝"
     end
   end
 end

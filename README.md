@@ -77,28 +77,32 @@ Ou instale:
 ## Uso
 
 ```ruby
+require 'engine'
+
 width, height, num_mines = 10, 20, 50
-game = Minesweeper.new(width, height, num_mines)
+game = Engine::Minesweeper.new(width, height, num_mines)
 
 while game.still_playing?
-  valid_move = game.play(rand(width), rand(height))
-  valid_flag = game.flag(rand(width), rand(height))
+  valid_move = game.play(rand(1..width), rand(1..height))
+  valid_flag = game.flag(rand(1..width), rand(1..height))
   if valid_move or valid_flag
-  printer = (rand > 0.5) ? SimplePrinter.new : PrettyPrinter.new
-  printer.print(game.board_state)
+    printer = (rand > 0.5) ? Engine::SimplePrinter.new : Engine::PrettyPrinter.new
+    printer.print(game.board_state)
   end
 end
 
-puts "Fim do jogo!"
+puts 'Fim do jogo!'
 if game.victory?
-  puts "Você venceu!"
+  puts 'Você venceu!'
 else
-  puts "Você perdeu! As minas eram:"
-  PrettyPrinter.new.print(game.board_state(xray: true))
+  puts 'Você perdeu! As minas eram:'
+  Engine::PrettyPrinter.new.print(game.board_state(xray: true))
 end
 ```
 
 ## Desenvolvimento
+
+![Code Status](https://travis-ci.org/hguerra/minesweeper.svg?branch=master)
 
 * `bin/setup` para instalar as dependencias.
 * `rake spec` para executar os testes. 

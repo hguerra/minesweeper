@@ -12,7 +12,6 @@ module Engine
     end
 
     def print(board_state)
-      puts "╔═════════════╗\n║ Minesweeper ║\n╚═════════════╝"
       super
     end
   end

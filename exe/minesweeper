@@ -6,8 +6,8 @@ width, height, num_mines = 10, 20, 50
 game = Engine::Minesweeper.new(width, height, num_mines)
 
 while game.still_playing?
-  valid_move = game.play(rand(width), rand(height))
-  valid_flag = game.flag(rand(width), rand(height))
+  valid_move = game.play(rand(1..width), rand(1..height))
+  valid_flag = game.flag(rand(1..width), rand(1..height))
   if valid_move or valid_flag
     printer = (rand > 0.5) ? Engine::SimplePrinter.new : Engine::PrettyPrinter.new
     printer.print(game.board_state)
