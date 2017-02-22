@@ -192,4 +192,11 @@ RSpec.describe Engine::Minesweeper do
       end
     end
   end
+
+  describe '#board_state' do
+    it 'should return a BoardState' do
+      expect(@minesweeper.board_state).to be_a Engine::BoardState
+      expect(@minesweeper.board_state({xray: true})).to be_a Engine::BoardState
+    end
+  end
 end

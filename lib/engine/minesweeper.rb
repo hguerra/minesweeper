@@ -57,6 +57,10 @@ module Engine
       @alive and not still_playing?
     end
 
+    def board_state(**options)
+      BoardState.new(@board, options)
+    end
+
     private
 
     def load_board(prng)
